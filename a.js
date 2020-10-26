@@ -6,31 +6,24 @@
 
 // console.log(memory._memory[0], memory._memory[1])
 
+const Cpu = require('./core/cpu');
 
-const Cpu = require('./cpu')
+const cpu = new Cpu();
 
-const cpu = new Cpu()
-
-const code = [1, 0, 10, 1, 1, 23, 6, 2, 0, 1, 0]
-
-function exec (arr) {
-  for(let i = 0; i < arr.length;i++) {
-    cpu.memory._memory[i] = arr[i]
-  }
-}
+// const code = [1, 0, 10, 1, 1, 23, 6, 2, 0, 1, 0];
 
 // exec(code)
-exec([ 1, 0, 0,
+cpu.momery.set([1, 0, 0,
   1, 1, 1,
   1, 2, 10,
   5, 0, 0, 1,
   13, 0, 2,
   16, 9, 0,
-  0])
+  0]);
 
 // cpu.next()
 while (!cpu.halted) {
-  cpu.next()
+  cpu.next();
 }
 
-console.log(cpu.registers)
+console.log(cpu.registers);
