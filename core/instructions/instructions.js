@@ -9,6 +9,11 @@ const instructions = {
   MUL: 7,
   DIV: 8,
   MOD: 9,
+  // Move Instructions
+  MOV_C: 1,
+  MOV: 2,
+  MOV_R: 4,
+  MOV_M: 5,
 };
 
 const parameters = {
