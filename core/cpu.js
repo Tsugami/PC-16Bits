@@ -1,13 +1,16 @@
 const Memory = require('./memory');
+const Register = require('./register');
+const { instructions, parameters } = require('./instructions/instructions');
+const Flags = require('./flags');
+const MoveInstructions = require('./instructions/MoveInstructions');
+const LogicalInstructions = require('./instructions/LogicalInstructions');
+const ArithmeticInstructions = require('./instructions/ArithmeticInstructions');
+const ConditionInstructions = require('./instructions/ConditionInstructions');
 
 class Cpu {
   constructor() {
-    this.flags = {
-      zero: 0,
-      signal: 0,
-    };
-
-    this.registers = new Uint16Array(10);
+    this.flags = new Flags();
+    this.registers = new Register(10);
     this.memory = new Memory();
     this.halted = false;
     // instruction pointer
@@ -21,64 +24,41 @@ class Cpu {
 
     const sinal = this.memory.get(this.ip);
     console.log('SINAL', sinal);
+
+    if (instructions.HALTED === sinal) {
+      console.log('deu halted');
+      this.halted = true;
+      return;
+    }
+
+    if (this.runNormalInstruction(sinal) !== false) {
+      this.ip += parameters[sinal];
+    }
+  }
+
+  static runNormalInstruction(sinal) {
+    if (ArithmeticInstructions[sinal]) {
+      return ArithmeticInstructions[sinal](this.memory, this.registers, this.ip);
+    }
+
+    if (LogicalInstructions[sinal]) {
+      return LogicalInstructions[sinal](this.memory, this.registers, this.ip);
+    }
+
+    if (MoveInstructions[sinal]) {
+      return MoveInstructions[sinal](this.memory, this.registers, this.ip);
+    }
+
+    if (ConditionInstructions[sinal]) {
+      return ConditionInstructions[sinal](this.memory, this.registers, this.ip, this.flags);
+    }
+
+    return false;
+  }
+
+  runConditionInstruction(sinal) {
     switch (sinal) {
-      case 0:
-        console.log('deu halted');
-        this.halted = true;
-        break;
-
-      case 1: { // mov_constant reg
-      // move para um registrado da memoria
-        const to = this.memory.get(this.ip + 1);
-        const constant = this.memory.get(this.ip + 2);
-
-        this.registers[to] = constant;
-        this.ip += 3;
-        break;
-      }
-
-      case 2: {
-        const to = this.memory.get(this.ip + 1);
-        const lowbyte = this.memory.get(this.ip + 2);
-        const highbyte = this.memory.get(this.ip + 3);
-
-        this.registers[to] = lowbyte | highbyte << 8;
-        this.ip += 4;
-        break;
-      }
-
-      case 3: { // mov_constant reg
-      // move para um registrado da memoria
-        const to = this.memory.get(this.ip + 1);
-        const constant = this.memory.get(this.ip + 2);
-
-        this.registers[to] = this.registers[constant];
-        this.ip += 3;
-        break;
-      }
-
-      case 4: { // mov_constant reg
-        // move para um registrado da memoria
-        const to = this.memory.get(this.ip + 1);
-        const constant = this.memory.get(this.ip + 2);
-
-        this.registers[to] = this.memory.get(constant);
-        this.ip += 3;
-        break;
-      }
-
-      case 13: { // ===
-        const second = this.memory.get(this.ip + 1);
-        const third = this.memory.get(this.ip + 2);
-        const res = this.registers[second] - this.registers[third];
-        this.flags.zero = res === 0;
-        this.flags.signal = (res & (1 << 15)) >> 15;
-
-        this.ip += 3;
-        break;
-      }
-
-      case 14: {
+      case [instructions.JMP]: {
         const lowbyte = this.memory.get(this.ip + 1);
         const highbyte = this.memory.get(this.ip + 2);
 
@@ -86,7 +66,7 @@ class Cpu {
         break;
       }
 
-      case 15: { // JUMP ZERO JZ
+      case [instructions.JZ]: { // JUMP ZERO JZ
         const lowbyte = this.memory.get(this.ip + 1);
         const highbyte = this.memory.get(this.ip + 2);
 
@@ -99,7 +79,7 @@ class Cpu {
         break;
       }
 
-      case 16: { // JUMP NO ZERO JNZ
+      case [instructions.JNZ]: { // JUMP NO ZERO JNZ
         console.log('jump no zero');
         const lowbyte = this.memory.get(this.ip + 1);
         const highbyte = this.memory.get(this.ip + 2);
@@ -114,8 +94,10 @@ class Cpu {
       }
 
       default:
-        break;
+        return false;
     }
+
+    return true;
   }
 }
 

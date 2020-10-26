@@ -1,4 +1,5 @@
 const instructions = {
+  HALTED: 0,
   // Logical Instructions
   AND: 10,
   OR: 11,
@@ -11,9 +12,16 @@ const instructions = {
   MOD: 9,
   // Move Instructions
   MOV_C: 1,
-  MOV: 2,
+  MOV_N: 2,
   MOV_R: 4,
   MOV_M: 5,
+  // Condition Instructions
+  CMP: 13,
+  // JUMPS
+  JMP: 14,
+  JZ: 15,
+  JNZ: 16,
+
 };
 
 const parameters = {
@@ -27,6 +35,11 @@ const parameters = {
   [instructions.MUL]: 4,
   [instructions.DIV]: 4,
   [instructions.MOD]: 4,
+  // Move Instructions
+  [instructions.MOV_C]: 3,
+  [instructions.MOV_N]: 4,
+  [instructions.MOV_R]: 3,
+  [instructions.MOV_M]: 3,
 };
 
 module.exports = {
