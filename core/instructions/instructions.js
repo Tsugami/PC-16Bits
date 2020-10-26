@@ -40,6 +40,8 @@ const parameters = {
   [instructions.MOV_N]: 4,
   [instructions.MOV_R]: 3,
   [instructions.MOV_M]: 3,
+  // JUMP
+  [instructions.JZ]: 3,
 };
 
 module.exports = {
