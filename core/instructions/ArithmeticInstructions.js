@@ -1,4 +1,5 @@
 const { instructions } = require('./instructions');
+const utils = require('../utils');
 
 class ArithmeticInstructions {
   static run(memory, registers, pointer, func) {
@@ -9,12 +10,20 @@ class ArithmeticInstructions {
     registers.set(to, func(registers.get(second), registers.get(third)));
   }
 
-  static [instructions.ADD](memory, registers, pointer) {
-    ArithmeticInstructions.run(memory, registers, pointer, (second, third) => second + third);
+  static [instructions.ADD](memory, registers, pointer, flags) {
+    ArithmeticInstructions.run(memory, registers, pointer, (second, third) => {
+      const result = second + third;
+      flags.setOverflow(utils.getOverflowBinary(result));
+      return result;
+    });
   }
 
-  static [instructions.SUB](memory, registers, pointer) {
-    ArithmeticInstructions.run(memory, registers, pointer, (second, third) => second - third);
+  static [instructions.SUB](memory, registers, pointer, flags) {
+    ArithmeticInstructions.run(memory, registers, pointer, (second, third) => {
+      const result = second - third;
+      flags.setOverflow(utils.getOverflowBinary(result));
+      return result;
+    });
   }
 
   static [instructions.MUL](memory, registers, pointer) {

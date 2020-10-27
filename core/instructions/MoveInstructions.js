@@ -18,16 +18,23 @@ class MoveInstructions {
 
   static [instructions.MOV_R](memory, registers, pointer) {
     const to = memory.get(pointer + 1);
-    const index = memory.get(pointer + 2);
+    const from = memory.get(pointer + 2);
 
-    registers.set(to, registers.get(index));
+    registers.set(to, registers.get(from));
   }
 
   static [instructions.MOV_M](memory, registers, pointer) {
     const to = memory.get(pointer + 1);
-    const index = memory.get(pointer + 2);
+    const from = memory.get(pointer + 2);
 
-    registers.set(to, memory.get(index));
+    registers.set(to, memory.get(from));
+  }
+
+  static [instructions.STORE](memory, registers, pointer) {
+    const to = memory.get(pointer + 1);
+    const from = memory.get(pointer + 1);
+
+    memory.setI(to, registers.get(from));
   }
 }
 

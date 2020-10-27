@@ -14,14 +14,15 @@ const instructions = {
   MOV_C: 1,
   MOV_N: 2,
   MOV_R: 4,
-  MOV_M: 5,
+  MOV_M: 18,
+  STORE: 17,
   // Condition Instructions
   CMP: 13,
   // JUMPS
   JMP: 14,
   JZ: 15,
   JNZ: 16,
-
+  JG: 19,
 };
 
 const parameters = {
@@ -40,8 +41,10 @@ const parameters = {
   [instructions.MOV_N]: 4,
   [instructions.MOV_R]: 3,
   [instructions.MOV_M]: 3,
+  [instructions.STORE]: 2,
   // JUMP
   [instructions.JZ]: 3,
+  [instructions.JG]: 1,
 };
 
 module.exports = {

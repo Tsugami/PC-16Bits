@@ -14,6 +14,10 @@ class Memory extends Uint8Array {
       this[i] = values[i];
     }
   }
+
+  setI(index, value) {
+    this[index] = value;
+  }
 }
 
 module.exports = Memory;
