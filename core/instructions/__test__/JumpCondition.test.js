@@ -18,13 +18,13 @@ describe('Jump Instructions', () => {
 
   describe('JZ', () => {
     it('should return 256', () => {
-      flags.setZero(true);
+      flags.setZero(1);
       const result = JumpInstructions[instructions.JZ](memory, registers, 0, flags);
       expect(result).toEqual(256);
     });
 
     it('should return parameter counter', () => {
-      flags.setZero(false);
+      flags.setZero(0);
       const result = JumpInstructions[instructions.JZ](memory, registers, 0, flags);
       expect(result).toEqual(parameters[instructions.JZ]);
     });
@@ -32,13 +32,13 @@ describe('Jump Instructions', () => {
 
   describe('JNZ', () => {
     it('should return 256', () => {
-      flags.setZero(false);
+      flags.setZero(0);
       const result = JumpInstructions[instructions.JNZ](memory, registers, 0, flags);
       expect(result).toEqual(256);
     });
 
     it('should return parameter counter', () => {
-      flags.setZero(true);
+      flags.setZero(1);
       const result = JumpInstructions[instructions.JNZ](memory, registers, 0, flags);
       expect(result).toEqual(parameters[instructions.JNZ]);
     });

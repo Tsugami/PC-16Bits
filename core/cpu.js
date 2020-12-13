@@ -58,7 +58,7 @@ class Cpu {
 
   runNormalInstruction(sinal) {
     if (ArithmeticInstructions[sinal]) {
-      return ArithmeticInstructions[sinal](this.memory, this.registers, this.ip);
+      return ArithmeticInstructions[sinal](this.memory, this.registers, this.ip, this.flags);
     }
 
     if (LogicalInstructions[sinal]) {

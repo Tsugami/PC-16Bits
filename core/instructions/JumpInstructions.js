@@ -29,7 +29,7 @@ class JumpInstructions {
   }
 
   static [instructions.JG](memory, _, pointer, flags) {
-    if (flags.isZero) {
+    if (flags.isOK) {
       const to = memory.get(pointer + 1);
       return to;
     }
